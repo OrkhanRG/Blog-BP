@@ -5,7 +5,7 @@
 </p>
 
 <p>
-    Zəhmət olmasa aşağıdakı linkə giriş edərək mailinizi doğrulayınız
+    Zəhmət olmasa aşağıdakı linkə giriş edərək mailinizi doğrulayınız.
 </p> <br>
 
 <a href="{{ route('verify-token', ['token' => $token]) }}">
