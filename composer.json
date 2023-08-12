@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "^5.8",
         "laravel/tinker": "^2.8",
+        "predis/predis": "^2.2",
         "realrashid/sweet-alert": "^7.0",
         "unisharp/laravel-filemanager": "^2.6"
     },

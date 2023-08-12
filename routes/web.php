@@ -86,7 +86,7 @@ Route::post('admin/login',[LoginController::class, 'login']);
 //front home page
 Route::get('/', [FrontController::class, 'home'])->name('home');
 Route::get('/kateqoriyalar/{category:slug}', [FrontController::class, 'category'])->name('front.category');
-Route::get('/@{user:username}/{article:slug}', [FrontController::class, 'articleDetail'])->name('front.articleDetail');
+Route::get('/@{user:username}/{article:slug}', [FrontController::class, 'articleDetail'])->name('front.articleDetail')->middleware('visitedArticle');
 Route::post('{article:id}/article-comment', [FrontController::class, 'articleComment'])->name('article.comment');
 
 //auth

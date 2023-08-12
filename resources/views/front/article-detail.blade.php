@@ -75,6 +75,58 @@
                 </div>
             </div>
 
+            @if(isset($suggestArticles) && count($suggestArticles))
+                <div class="mt-5">
+                    <div class="swiper-most-popular mt-3">
+                        <!-- Additional required wrapper -->
+                        <div class="swiper-wrapper">
+                            <!-- Slides -->
+                            @foreach($suggestArticles as $article)
+                                @php
+                                    $image = $article->image;
+                                    $publishDate = \Carbon\Carbon::parse($article->publish_date)->format('d-m-Y');
+                                    if (!file_exists(public_path($image)))
+                                        {
+                                            $image = $settings->article_default_image;
+                                        }
+                                @endphp
+                                <div class="swiper-slide">
+                                    <a href="{{ route('front.articleDetail', [
+                                    'user' => $article->user->username,
+                                    'article' => $article->slug
+                                    ]) }}">
+                                        <img src="{{ asset($image) }}" class="img-fluid">
+                                    </a>
+
+                                    <div class="most-popular-body mt-2">
+                                        <div class="most-popular-author d-flex justify-content-between">
+                                            <div>
+                                                Yazar: <a href="#">{{ $article->user->name }}</a>
+                                            </div>
+                                            <div class="text-end">Kategori:
+                                                <a href="{{ route('front.category', ['category' => $article->category->slug]) }}">
+                                                    {{ $article->category->name }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="most-popular-title">
+                                            <h4 class="text-black">
+                                                <a href="#">
+                                                    {{ $article->title }}
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div class="most-popular-date">
+                                            <span>{{ $publishDate }}</span> &#x25CF; <span>10 dk</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            @endif
+
         </section>
 
         <section class="article-responses mt-4">
@@ -119,14 +171,18 @@
                         <div class="article-response bg-white p-2 mt-3 d-flex align-items-center shadow-sm">
                             <div class="col-md-2">
                                 @php
-                                    if ($comment->user) {
+                                    if ($comment->user)
+                                    {
                                         $image = $comment->user->image;
                                         $name = $comment->user->name;
 
-                                        if (!file_exists(public_path($image))) {
+                                        if (!file_exists(public_path($image)))
+                                        {
                                             $image = $settings->default_comment_profile_image;
                                         }
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         $image = $settings->default_comment_profile_image;
                                         $name = $comment->name;
                                     }
