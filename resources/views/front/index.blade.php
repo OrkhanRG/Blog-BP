@@ -101,7 +101,7 @@
              data-aos-duration="2000"
              data-aos-easing="ease-in-out">
         <div class="popular-title col-md-8">
-            <h2 class="font-montserrat fw-semibold">En Çok Okunan Makaleler</h2>
+            <h2 class="font-montserrat fw-semibold">Ən Çox Oxunan Məqalələr</h2>
         </div>
         <div class="col-4">
             <div class="most-popular-swiper-navigation text-end">
@@ -341,7 +341,7 @@
              data-aos-easing="ease-out-cubic">
 
         <div class="popular-title col-md-12">
-            <h2 class="font-montserrat fw-semibold">Son Makaleler</h2>
+            <h2 class="font-montserrat fw-semibold">Son Məqalələr</h2>
         </div>
 
         <div class="col-md-4 mt-4">
@@ -376,7 +376,7 @@
                     <div>
                         Yazar: <a href="#">Sercan Özen</a>
                     </div>
-                    <div class="text-end">Kategori: <a href="#">Css</a></div>                            </div>
+                    <div class="text-end">Kate`gori: <a href="#">Css</a></div>                            </div>
                 <div class="most-popular-title">
                     <h4 class="text-black">
                         <a href="#">

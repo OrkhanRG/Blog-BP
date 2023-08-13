@@ -7,34 +7,10 @@
     <section class="articles row">
 
         <div class="popular-title col-md-12">
-            <h2 class="font-montserrat fw-semibold">Son Makaleler</h2>
+            <h2 class="font-montserrat fw-semibold">
+                {{ $listTitle ?? 'Son Məqalələr' }}
+            </h2>
         </div>
-
-        {{--@foreach($category->articlesActive as $item)
-            <div class="col-md-4 mt-4">
-                <a href="#">
-                    <img src="{{asset($item->image)}}" class="img-fluid">
-                </a>
-                <div class="most-popular-body mt-2">
-                    <div class="most-popular-author d-flex justify-content-between">
-                        <div>
-                            Yazar: <a href="#">{{$item->user->name}}</a>
-                        </div>
-                        <div class="text-end">Kategori: <a href="#">{{$item->category->name}}</a></div>
-                    </div>
-                    <div class="most-popular-title">
-                        <h4 class="text-black">
-                            <a href="#">
-                                {{substr($item->title, 0, 20)}}...
-                            </a>
-                        </h4>
-                    </div>
-                    <div class="most-popular-date">
-                        <span>{{\Carbon\Carbon::parse($item->publish_date)->format('d-m-Y')}}</span> &#x25CF; <span>10 dk</span>
-                    </div>
-                </div>
-            </div>
-        @endforeach--}}
 
         @foreach($articles as $item)
             <div class="col-md-4 mt-4">

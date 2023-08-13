@@ -139,7 +139,7 @@
             </div>
             <div class="col-md-3">
                 <section class="categories bg-white shadow-sm">
-                    <h4 class="bg-light text-secondary p-3 border-bottom border-1 border-light m-0">Kategoriler</h4>
+                    <h4 class="bg-light text-secondary p-3 border-bottom border-1 border-light m-0">Kateqoriyalar</h4>
                     <ul class="list-group m-0">
                         @foreach($categories as $category)
                         <li class="px-3 py-3">
@@ -200,7 +200,7 @@
                                     height: 200px;
                                     "></div>
                                         <div>
-                                            Sercan Özen
+                                            Orxan Ismayilov
                                         </div>
                                     </a>
                                 </div>

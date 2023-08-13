@@ -26,6 +26,10 @@
                     </div>
                     <div class="article-header-author">
                         Yazar: <a href="#"><strong>{{$article->user->name}}</strong></a>
+                        <br>
+                        Kateqoriya:<a href="javascript:void(0)" class="category-link">
+                            {{ $article->category->name }}
+                        </a>
                     </div>
 
                 </div>
@@ -77,7 +81,7 @@
 
             @if(isset($suggestArticles) && count($suggestArticles))
                 <div class="mt-5">
-                    <div class="swiper-most-popular mt-3">
+                    <div class="swiper-suggest-article mt-3">
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                             <!-- Slides -->
@@ -85,7 +89,7 @@
                                 @php
                                     $image = $article->image;
                                     $publishDate = \Carbon\Carbon::parse($article->publish_date)->format('d-m-Y');
-                                    if (!file_exists(public_path($image)))
+                                    if (!file_exists(public_path($image)) || is_null($image))
                                         {
                                             $image = $settings->article_default_image;
                                         }
@@ -161,7 +165,7 @@
             </div>
 
             <div class="response-body p-4">
-                <h3>Makaleye Verilen Cevaplar</h3>
+                <h3>Məqaləyə Verilən Cavablar</h3>
                 <hr class="mb-4">
 
                 @foreach($article->comments as $comment)

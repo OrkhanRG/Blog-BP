@@ -52,14 +52,26 @@ class FrontController extends Controller
     {
         $article = session()->get('last_article');
         $visitedArticles = session()->get('visited_articles');
-
-        $visitedArticlesCategoryIds = Article::query()
+        $visitedArticlesCategoryIds = [];
+        $visitedArticlesAuthorIds = [];
+        $visitedInfo = Article::query()
+            ->select('category_id', 'user_id')
             ->whereIn('id', $visitedArticles)
-            ->pluck('category_id');
+            ->get();
+
+        foreach ($visitedInfo as $item)
+        {
+            $visitedArticlesCategoryIds[] = $item->categroy_id;
+            $visitedArticlesAuthorIds[] = $item->user_id;
+        }
 
         $suggestArticles = Article::query()
             ->with(['user', 'category'])
-            ->whereIn('category_id', $visitedArticlesCategoryIds)
+            ->where(function ($query) use ($visitedArticlesCategoryIds, $visitedArticlesAuthorIds){
+                $query->whereIn('category_id', $visitedArticlesCategoryIds)
+                      ->orWhereIn('user_id', $visitedArticlesAuthorIds);
+
+            })
             ->whereNotIn('id', $visitedArticles)
             ->limit(6)
             ->get();
