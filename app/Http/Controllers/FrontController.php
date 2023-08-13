@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Models\ArticleComment;
 use App\Models\Category;
 use App\Models\Settings;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -30,22 +31,22 @@ class FrontController extends Controller
 
     public function category(Request $request, string $slug)
     {
-        $category = Category::query()->with('articlesActive')->where('slug', $slug)->first();
-
 //        $articles = $category->articlesActive()->with(['category', 'user'])->paginate(1);
 //        $articles = $category->articlesActive()->paginate(1);
 //        $articles->load(['user', 'category']);
 
         $articles = Article::query()
-            ->with(['user:id,name,username', 'category:id,name'])
+            ->with(['user:id,name,username', 'category:id,name,slug'])
             ->whereHas('category', function ($query) use ($slug) {
                 $query->where('slug', $slug);
                     /*->whereNotNull('publish_date')
                     ->where('publish_date', '<=', now());*/
-            })->paginate(3);
+            })
+            ->paginate(21);
 
+        $title = Category::query()->where('slug', $slug)->first()->name . ' Kateqoriyasına Aid Məqalələr';
 
-        return view('front.article-list', compact('category', 'articles'));
+        return view('front.article-list', compact( 'articles', 'title'));
     }
 
     public function articleDetail(Request $request, string $username, string $articleSlug)
@@ -103,5 +104,49 @@ class FrontController extends Controller
 
         alert()->success("Uğurlu", "Mesajınız göndərildi. Yoxlamdan sonra mesajınız yayınlanacaq. Zəhmət olmasa təsdiq olmasını gözləyin")->showConfirmButton('yaxşı', '#3085d6')->autoClose(5000);
         return redirect()->back();
+    }
+
+    public function authorArticles(Request $request, string $username)
+    {
+        $articles = Article::query()
+            ->with(['user:id,name,username', 'category:id,name,slug'])
+            ->whereHas('user', function ($query) use ($username) {
+                $query->where('username', $username);
+            })
+            ->paginate(21);
+
+        $title = User::query()->where('username', $username)->first()->name.' Məqalələri';
+
+        return view('front.article-list', compact( 'articles', 'title'));
+    }
+
+    public function search(Request $request)
+    {
+        $searchText = $request->q;
+
+        $articles = Article::query()
+            ->with(['user', 'category'])
+            ->whereHas('user', function($query) use ($searchText)
+            {
+                $query->where('name', 'LIKE', "%" . $searchText . "%")
+                    ->orWhere('username', 'LIKE', "%" . $searchText . "%")
+                    ->orWhere('about', 'LIKE', "%" . $searchText . "%");
+            })
+            ->whereHas('category', function($query) use ($searchText)
+            {
+                $query->orWhere('name', 'LIKE', "%" . $searchText . "%")
+                    ->orWhere('description', 'LIKE', "%" . $searchText . "%")
+                    ->orWhere('slug', 'LIKE', "%" . $searchText . "%");
+            })
+            ->orWhere("title", "LIKE", "%" . $searchText . "%")
+            ->orWhere("slug", "LIKE", "%" . $searchText . "%")
+            ->orWhere("body", "LIKE", "%" . $searchText . "%")
+            ->orWhere("tags", "LIKE", "%" . $searchText . "%")
+            ->paginate(30);
+
+
+        $title = $searchText.' Axtarış Nəticəsi';
+
+        return view('front.article-list', compact( 'articles', 'title'));
     }
 }

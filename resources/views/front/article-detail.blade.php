@@ -10,7 +10,12 @@
                 <div class="article-header font-lato d-flex justify-content-between pb-4">
                     <div class="article-header-date">
                         @php
+                            $image = $article->image;
                             $publishDate = \Carbon\Carbon::parse($article->publish_date)->format('d-m-Y');
+                            if (!file_exists(public_path($image)) || is_null($image))
+                                {
+                                   $image = $settings->article_default_image;
+                                }
                         @endphp
                         <time datetime="{{$publishDate}}">{{$publishDate}}</time>
                         {{--@foreach($article->getTagsAttribute() as $tags)
@@ -21,8 +26,11 @@
                                 $class = ['text-primary', 'text-danger', 'text-success', 'text-warning'];
                                 $randClass = $class[random_int(0,3)];
                             @endphp
-                            <span class="{{$randClass}}">{{$tags}}</span>
+                            <a href="{{ route('front.search', ['q' => $tags ]) }}">
+                                <span class="{{$randClass}}">{{$tags}}</span>
+                            </a>
                         @endforeach
+
                     </div>
                     <div class="article-header-author">
                         Yazar: <a href="#"><strong>{{$article->user->name}}</strong></a>
@@ -38,7 +46,7 @@
                         {{$article->title}}
                     </h1>
                     <div class="mx-auto d-flex justify-content-center">
-                        <img src="{{asset($article->image)}}" class="img-fluid w-75 rounded-1">
+                        <img src="{{asset($image)}}" class="img-fluid w-75 rounded-1">
                     </div>
                     <div class="text-secondary mt-5">
 
@@ -108,7 +116,7 @@
                                                 Yazar: <a href="#">{{ $article->user->name }}</a>
                                             </div>
                                             <div class="text-end">Kategori:
-                                                <a href="{{ route('front.category', ['category' => $article->category->slug]) }}">
+                                                <a href="{{ route('front.categoryArticles', ['category' => $article->category->slug]) }}">
                                                     {{ $article->category->name }}
                                                 </a>
                                             </div>

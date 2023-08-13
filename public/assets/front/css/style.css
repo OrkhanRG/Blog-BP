@@ -171,7 +171,7 @@ code {
     background-color: #ee8606;
     color: #fff;
 }
-.favorite-article, .social-media-register a{
+.favorite-article, .social-media-register a, .article-header-date a{
     text-decoration: none;
     color: inherit;
 }
