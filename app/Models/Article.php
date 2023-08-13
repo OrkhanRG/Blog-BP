@@ -15,9 +15,11 @@ class Article extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     //Default function -> get*Name*Attribute
-    public function getTagsToArrayAttribute(): array|false
+    public function getTagsToArrayAttribute(): array|false|null
     {
-        return explode(',', $this->attributes['tags']);
+        if (!is_null($this->attributes['tags']))
+            return explode(',', $this->attributes['tags']);
+        return $this->attributes['tags'];
     }
 
     public function category():HasOne

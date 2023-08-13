@@ -21,15 +21,20 @@
                         {{--@foreach($article->getTagsAttribute() as $tags)
                             <span>{{$tags}}</span>
                         @endforeach--}}
-                        @foreach($article->getAttribute('tagsToArray') as $tags)
-                            @php
-                                $class = ['text-primary', 'text-danger', 'text-success', 'text-warning'];
-                                $randClass = $class[random_int(0,3)];
-                            @endphp
-                            <a href="{{ route('front.search', ['q' => $tags ]) }}">
-                                <span class="{{$randClass}}">{{$tags}}</span>
-                            </a>
-                        @endforeach
+                        @php
+                            $tags = $article->getAttribute('tagsToArray');
+                        @endphp
+                        @if(!is_null($tags) && count($tags))
+                            @foreach($article->getAttribute('tagsToArray') as $tags)
+                                @php
+                                    $class = ['text-primary', 'text-danger', 'text-success', 'text-warning'];
+                                    $randClass = $class[random_int(0,3)];
+                                @endphp
+                                <a href="{{ route('front.search', ['q' => $tags ]) }}">
+                                    <span class="{{$randClass}}">{{$tags}}</span>
+                                </a>
+                            @endforeach
+                        @endif
 
                     </div>
                     <div class="article-header-author">
@@ -79,7 +84,14 @@
 
             <div class="article-authors mt-5">
                 <div class="bg-white p-4 d-flex justify-content-between align-items-center shadow-sm">
-                    <img src="{{asset($article->user->image)}}" alt="" width="75" height="75">
+                    @php
+                        $authorImage = $article->user->image;
+                        if (!file_exists(public_path($authorImage)) || is_null($authorImage))
+                            {
+                               $authorImage = $settings->default_comment_profile_image;
+                            }
+                    @endphp
+                    <img src="{{asset($authorImage)}}" alt="" width="75" height="75">
                     <div class="px-5 me-auto">
                         <h4 class="mt-3"><a href="">{{$article->user->name}}</a></h4>
                         <p class="text-secondary">{!! $article->user->about !!}</p>
