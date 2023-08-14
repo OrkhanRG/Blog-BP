@@ -9,15 +9,7 @@
             <div class="article-wrapper">
                 <div class="article-header font-lato d-flex justify-content-between pb-4">
                     <div class="article-header-date">
-                        @php
-                            $image = $article->image;
-                            $publishDate = \Carbon\Carbon::parse($article->publish_date)->format('d-m-Y');
-                            if (!file_exists(public_path($image)) || is_null($image))
-                                {
-                                   $image = $settings->article_default_image;
-                                }
-                        @endphp
-                        <time datetime="{{$publishDate}}">{{$publishDate}}</time>
+                        <time datetime="{{ $article->format_publish_date }}">{{ $article->format_publish_date }}</time>
                         {{--@foreach($article->getTagsAttribute() as $tags)
                             <span>{{$tags}}</span>
                         @endforeach--}}
@@ -50,13 +42,11 @@
                     <h1 class="fw-bold mb-4">
                         {{$article->title}}
                     </h1>
-                    <div class="mx-auto d-flex justify-content-center">
-                        <img src="{{asset($image)}}" class="img-fluid w-75 rounded-1">
+                    <div class="d-flex justify-content-center">
+                        <img src="{{ imageExist($article->image, $settings->article_default_image) }}" class="img-fluid w-75 rounded-1">
                     </div>
                     <div class="text-secondary mt-5">
-
                         {{$article->body}}
-
                     </div>
                 </div>
             </div>
@@ -84,14 +74,7 @@
 
             <div class="article-authors mt-5">
                 <div class="bg-white p-4 d-flex justify-content-between align-items-center shadow-sm">
-                    @php
-                        $authorImage = $article->user->image;
-                        if (!file_exists(public_path($authorImage)) || is_null($authorImage))
-                            {
-                               $authorImage = $settings->default_comment_profile_image;
-                            }
-                    @endphp
-                    <img src="{{asset($authorImage)}}" alt="" width="75" height="75">
+                    <img src="{{ imageExist($article->user->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
                     <div class="px-5 me-auto">
                         <h4 class="mt-3"><a href="">{{$article->user->name}}</a></h4>
                         <p class="text-secondary">{!! $article->user->about !!}</p>
@@ -106,20 +89,12 @@
                         <div class="swiper-wrapper">
                             <!-- Slides -->
                             @foreach($suggestArticles as $article)
-                                @php
-                                    $image = $article->image;
-                                    $publishDate = \Carbon\Carbon::parse($article->publish_date)->format('d-m-Y');
-                                    if (!file_exists(public_path($image)) || is_null($image))
-                                        {
-                                            $image = $settings->article_default_image;
-                                        }
-                                @endphp
                                 <div class="swiper-slide">
                                     <a href="{{ route('front.articleDetail', [
                                     'user' => $article->user->username,
                                     'article' => $article->slug
                                     ]) }}">
-                                        <img src="{{ asset($image) }}" class="img-fluid">
+                                        <img src="{{ asset(imageExist($article->image, $settings->article_default_image)) }}" class="img-fluid">
                                     </a>
 
                                     <div class="most-popular-body mt-2">
@@ -141,7 +116,7 @@
                                             </h4>
                                         </div>
                                         <div class="most-popular-date">
-                                            <span>{{ $publishDate }}</span> &#x25CF; <span>10 dk</span>
+                                            <span>{{ $article->format_publish_date }}</span> &#x25CF; <span>10 dk</span>
                                         </div>
                                     </div>
                                 </div>
@@ -197,21 +172,14 @@
                                 @php
                                     if ($comment->user)
                                     {
-                                        $image = $comment->user->image;
                                         $name = $comment->user->name;
-
-                                        if (!file_exists(public_path($image)))
-                                        {
-                                            $image = $settings->default_comment_profile_image;
-                                        }
                                     }
                                     else
                                     {
-                                        $image = $settings->default_comment_profile_image;
                                         $name = $comment->name;
                                     }
                                 @endphp
-                                <img src="{{asset($image)}}" alt="" width="75" height="75">
+                                <img src="{{asset(imageExist($comment->user->image, $settings->default_comment_profile_image))}}" alt="" width="75" height="75">
                             </div>
                             <div class="col-md-10">
                                 <div class="px-3">
@@ -252,20 +220,17 @@
                                     <div
                                         class="article-comment bg-white p-2 mt-3 d-flex justify-content-between align-items-center shadow-sm">
                                             @php
-                                            if ($child->user) {
-                                                $childImage = $child->user->image;
+                                            if ($child->user)
+                                            {
                                                 $childName = $child->user->name;
-
-                                                if (!file_exists(public_path($image))) {
-                                                    $image = $settings->default_comment_profile_image;
-                                                }
-                                            } else {
+                                            } else
+                                            {
                                                 $childImage = $settings->default_comment_profile_image;
                                                 $childName = $child->name;
                                             }
                                             @endphp
                                         <div class="col-md-2">
-                                            <img src="{{asset($childImage)}}" alt="" width="75" height="75">
+                                            <img src="{{ imageExist($child->user->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
                                         </div>
                                         <div class="col-md-10">
                                             <div class="px-3">

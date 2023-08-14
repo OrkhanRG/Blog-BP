@@ -22,6 +22,11 @@ class Article extends Model
         return $this->attributes['tags'];
     }
 
+    public function getFormatPublishDateAttribute(): string
+    {
+        return Carbon::parse($this->attributes['publish_date'])->format('d-m-Y H:i');
+    }
+
     public function category():HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
