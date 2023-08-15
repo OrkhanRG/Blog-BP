@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Mail\VerifyMail;
 use App\Models\User;
 use App\Models\UserVerify;
+use App\Notifications\PasswordChangedNotification;
 use App\Notifications\VerifyNotification;
 use Illuminate\Support\Str;
 
@@ -30,7 +31,8 @@ class UserRegisteredObserver
      */
     public function updated(User $user): void
     {
-        //
+        if ($user->wasChanged('password'))
+            $user->notify(new PasswordChangedNotification($user));
     }
 
     /**

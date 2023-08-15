@@ -206,13 +206,13 @@ code {
 .articles-response-comment-wrapper{
 
 }
-.like-comment{
+.like-comment, .btn-password-reset{
     text-decoration: none;
     color: inherit;
 }
-.like-comment:hover{
-  //default  /*color: #ee8606;*/
-color: dodgerblue;
+.like-comment:hover, .btn-password-reset:hover{
+    color: #ee8606;
+/*color: dodgerblue;*/
 }
 .comment-title-date time{
     color: inherit;

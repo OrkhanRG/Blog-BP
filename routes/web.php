@@ -103,6 +103,13 @@ Route::post('/register',[LoginController::class, 'register']);
 Route::get('/login',[LoginController::class, 'showLoginUser'])->name('user.login');
 Route::post('/login',[LoginController::class, 'loginUser']);
 
+Route::get('/elaqe', [LoginController::class, ''])->name('contact');
+
+Route::get('sifre-sifirla', [LoginController::class, 'showPasswordReset'])->name('passwordReset');
+Route::post('sifre-sifirla', [LoginController::class, 'sendPasswordReset']);
+Route::get('sifre-sifirla/{token}', [LoginController::class, 'showPasswordResetConfirm'])->name('passwordResetToken');
+Route::post('sifre-sifirla/{token}', [LoginController::class, 'passwordReset']);
+
 Route::get('/auth/verify/{token}', [LoginController::class, 'verify'])->name('verify-token');
 Route::get('/auth/{driver}/callback', [LoginController::class, 'socialVerify'])->name('socialVerify');
 Route::get('/auth/{driver}', [LoginController::class, 'socialLogin'])->name('socialLogin');
