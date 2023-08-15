@@ -65,14 +65,11 @@
 <script src="{{asset('assets/admin/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
 <script src="{{asset('assets/admin/plugins/perfectscroll/perfect-scrollbar.min.js')}}"></script>
 <script src="{{asset('assets/admin/plugins/pace/pace.min.js')}}"></script>
-<script src="{{asset('assets/admin/plugins/apexcharts/apexcharts.min.js')}}"></script>
+{{--<script src="{{asset('assets/admin/plugins/apexcharts/apexcharts.min.js')}}"></script>--}}
 <script src="{{asset('assets/admin/js/main.min.js')}}"></script>
 <script src="{{asset('assets/admin/js/custom.js')}}"></script>
-<script src="{{asset('assets/admin/js/pages/dashboard.js')}}"></script>
+{{--<script src="{{asset('assets/admin/js/pages/dashboard.js')}}"></script>--}}
 <script src="{{asset('vendor/sweetalert/sweetalert2.all.js')}}"></script>
-@include('sweetalert::alert')
-@yield('js')
-
 <script>
     $(document).ready(function () {
         $.ajaxSetup({
@@ -82,6 +79,9 @@
         });
     });
 </script>
+@include('sweetalert::alert')
+
+@yield('js')
 </body>
 </html>
 f

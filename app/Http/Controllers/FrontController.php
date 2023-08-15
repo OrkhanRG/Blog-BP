@@ -27,16 +27,6 @@ class FrontController extends Controller
 
     public function home()
     {
-        Log::warning('TEST LOG');
-        Log::error('TEST LOG');
-        Log::info('TEST LOG');
-        Log::emergency('TEST LOG');
-        Log::critical('TEST LOG');
-        Log::alert('TEST LOG');
-        Log::debug('TEST LOG');
-        Log::notice('TEST LOG');
-
-
         $mostPopularArticles = Article::query()
             ->with(['user', 'category'])
             ->whereHas('user')

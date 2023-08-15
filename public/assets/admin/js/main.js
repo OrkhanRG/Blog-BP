@@ -306,3 +306,5 @@ $(window).on("load", function () {
     setTimeout(function() {
     $('body').addClass('no-loader')}, 1000)
 });
+
+
