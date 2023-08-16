@@ -82,6 +82,13 @@
                 </a>
             </li>
 
+            <li class="{{ Route::is('dbLogs') ? 'open' : '' }}">
+                <a href="{{route('dbLogs')}}">
+                    <i class="material-icons-two-tone">settings</i>
+                    Loglar
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>

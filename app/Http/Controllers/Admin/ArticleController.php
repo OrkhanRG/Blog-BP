@@ -193,7 +193,7 @@ class ArticleController extends Controller
                                 ->where('id', $request->id);
         $articleFind = $articleQuery->first();
 
-        $articleQuery->update($data);
+        $articleQuery->first()->update($data);
 
         if (!is_null($request->image))
         {

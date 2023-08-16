@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ArticleCommentController;
+use App\Http\Controllers\Admin\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
             \UniSharp\LaravelFilemanager\Lfm::routes();
         });
         Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
+        Route::get('logs-db', [LogController::class, 'index'])->name('dbLogs');
+        Route::get('logs-db/{id}', [LogController::class, 'getLog'])->name('dbLogs.getLog')->whereNumber('id');
 
         Route::get('/', function () {
             return view('admin.index');

@@ -10,6 +10,7 @@ use App\Http\Requests\UserStoreRequest;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
 use App\Models\UserVerify;
+use App\Traits\Loggable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,8 @@ use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends Controller
 {
+    use Loggable;
+
     public function showLogin()
     {
         return view('auth.login');
@@ -61,6 +64,7 @@ class LoginController extends Controller
 
         if ($user && Hash::check($password, $user->password)) {
             Auth::login($user, $remember);
+            $this->log('login', $user->id, $user->toArray(), User::class);
 
             $userIsAdmin = Auth::user()->is_admin;
             if (!$userIsAdmin)
@@ -99,6 +103,8 @@ class LoginController extends Controller
         if (Auth::check())
         {
             $isAdmin = Auth::user()->is_admin;
+            $this->log('logout', \auth()->id(), \auth()->user()->toArray() , User::class);
+
             Auth::logout();
 
             $request->session()->invalidate();
@@ -149,7 +155,7 @@ class LoginController extends Controller
 
     public function verify(Request $request ,string $token)
     {
-        $verifyQuery = UserVerify::query()->where('token', $token);
+        $verifyQuery = UserVerify::query()->with('user')->where('token', $token);
         $find = $verifyQuery->first();
 
         if (!is_null($find))
@@ -161,6 +167,7 @@ class LoginController extends Controller
                 $user->email_verified_at = now();
                 $user->status = 1;
                 $user->save();
+                $this->log('verify user', $user->id, $user->toArrya(), User::class);
                 $verifyQuery->delete();
                 $message = 'Emailiniz doğrulandı';
             }
@@ -196,6 +203,7 @@ class LoginController extends Controller
         if ($userCheck)
         {
             Auth::login($userCheck);
+            $this->log('verify user', \auth()->id(), \auth()->user()->toArray(), User::class);
             return redirect()->route('home');
         }
 
@@ -256,6 +264,7 @@ class LoginController extends Controller
         }
 
         Mail::to($find->email)->send(new ResetPasswordMail($find, $token));
+        $this->log('password reset mail send', $find->id, $find->toArrya(), User::class);
 
         alert()
             ->success("Uğurlu", "Şifrənizi sıfırlamaq üçün mail göndərildi.")

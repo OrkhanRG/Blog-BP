@@ -232,7 +232,7 @@ class CategoryController extends Controller
 
         if (!is_null($request->image)) {
             $imageFile = $request->file('image');
-            dd($imageFile);
+
             $orginalName = $imageFile->getClientOriginalName();
             $orginalExtension = $imageFile->getClientOriginalExtension();
             $explodeName = explode('.', $orginalName)[0];
