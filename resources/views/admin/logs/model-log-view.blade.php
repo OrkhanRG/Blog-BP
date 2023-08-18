@@ -229,6 +229,49 @@
                     @endif
                 </td>
             </tr>
+            <tr>
+                <td>Header Text</td>
+                <td>
+                    {!! $data->header_text !!}
+                </td>
+            </tr>
+            <tr>
+                <td>Footer Text</td>
+                <td>
+                    {!! $data->footer_text !!}
+                </td>
+            </tr>
+            <tr>
+                <td>Feature Article Is Active</td>
+                <td>
+                    @if($data->feature_categories_is_active)
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm">Aktiv</a>
+                    @else
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm">Passiv</a>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td>Video Is Active</td>
+                <td>
+                    @if($data->video_is_active)
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm">Aktiv</a>
+                    @else
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm">Passiv</a>
+                    @endif
+                </td>
+            </tr>
+            <tr>
+                <td>Author Is Active</td>
+                <td>
+                    @if($data->author_is_active)
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm">Aktiv</a>
+                    @else
+                        <a href="javascript:void(0)" class="btn btn-danger btn-sm">Passiv</a>
+                    @endif
+                </td>
+            </tr>
+
         @endif
     </x-slot:rows>
 </x-bootstrap.table>

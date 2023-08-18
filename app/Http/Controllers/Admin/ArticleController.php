@@ -111,7 +111,13 @@ class ArticleController extends Controller
         }
 
         $data['user_id'] = auth()->id();
-//        $data['user_id'] = auth()->user()->id;
+
+        $status = 0;
+        if (isset($data['status']))
+        {
+            $status = 1;
+        }
+        $data['status'] = $status;
 
         Article::create($data);
         if (!is_null($request->image))
@@ -147,23 +153,35 @@ class ArticleController extends Controller
 
     public function update(ArticleUpdateRequest $request)
     {
+        $articleQuery = Article::query()
+            ->where('id', $request->id);
+        $articleFind = $articleQuery->first();
+
         $data = $request->except('_token');
-        $slug = $data['slug'] ?? $data['title'];
+        $slug = $articleFind->title != $data['title'] ? $data['title'] : ($data['slug'] ?? $data['title']);
         $slug = Str::slug($slug);
         $slugTitle = Str::slug($data['title']);
 
-        $checkSlug = $this->slugCheck($slug);
+        if ($articleFind->slug !=  $slug)
+        {
+            $checkSlug = $this->slugCheck($slug);
 
-        if (!is_null($checkSlug)) {
-            $checkTitleSlug = $this->slugCheck($slugTitle);
-            if (!is_null($checkTitleSlug)) {
-                $slug = Str::slug($slug . time());
-            } else {
-                $slug = $slugTitle;
+            if (!is_null($checkSlug)) {
+                $checkTitleSlug = $this->slugCheck($slugTitle);
+                if (!is_null($checkTitleSlug)) {
+                    $slug = Str::slug($slug . time());
+                } else {
+                    $slug = $slugTitle;
+                }
             }
-        }
 
-        $data['slug'] = $slug;
+            $data['slug'] = $slug;
+        }
+        else
+//            if (empty($data['slug']) && !is_null($articleFind->slug))
+        {
+            unset($data['slug']);
+        }
 
         if (!is_null($request->image))
         {
@@ -189,9 +207,12 @@ class ArticleController extends Controller
 
         $data['user_id'] = auth()->id();
 
-        $articleQuery = Article::query()
-                                ->where('id', $request->id);
-        $articleFind = $articleQuery->first();
+        $status = 0;
+        if (isset($data['status']))
+        {
+            $status = 1;
+        }
+        $data['status'] = $status;
 
         $articleQuery->first()->update($data);
 

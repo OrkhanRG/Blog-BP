@@ -24,8 +24,26 @@
             <form action="">
                 <div class="row">
                     <div class="col-3 my-2">
-                        <input type="text" class="form-control" name="search_text" placeholder="Title, Slug, Body, Tags"
-                               value="{{request()->get('search_text')}}">
+                        <input type="text" class="js-states form-control" name="search_text" placeholder="Data, Created Date" value="{{request()->get('search_text')}}">
+                    </div>
+                    <div class="col-3 my-2">
+                        <input type="text" class="form-control" name="user_search_text" placeholder="User Name, Surname, Email" value="{{request()->get('user_search_text')}}">
+                    </div>
+                    <div class="col-3 my-2">
+                        <select name="model" id="model" class="form-control">
+                            <option value="{{ null }}">Model</option>
+                            @foreach($models as $model)
+                                <option {{request()->get('model')==$model ? 'selected' : ''}}>{{ $model }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-3 my-2">
+                        <select name="action" id="actions" class="form-control">
+                            <option value="{{ null }}">Action</option>
+                            @foreach($actions as $action)
+                                <option {{request()->get('action')==$action ? 'selected' : ''}}>{{ $action }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <hr>
                     <div class="col-6 mb-3 d-flex">
@@ -56,7 +74,7 @@
                             <td>{{$log->loggable_type}}</td>
                             <td>
                                 <a href="javascript:void(0)"
-                                   class="btn btn-info btn-sm btnLogDetail"
+                                   class="btn btn-info btn-sm btnModalLogDetail"
                                    data-bs-toggle="modal"
                                    data-bs-target="#contenViewModal"
                                    data-id="{{ $log->id }}"
@@ -69,9 +87,10 @@
                             </td>
                             <td>
                                 <a href="javascript:void(0)"
-                                   class="btn btn-primary btn-sm"
+                                   class="btn btn-primary btn-sm btnDataLogDetail"
                                    data-bs-toggle="modal"
                                    data-bs-target="#contenViewModal"
+                                   data-id="{{ $log->id }}"
                                 >
                                     <i class="material-icons ms-0">visibility</i>
                                 </a>
@@ -97,7 +116,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalBody">
-                    ...
+                    <pre><code class="language-json" id="jsonData"></code></pre>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bağla</button>
@@ -112,68 +131,11 @@
     <script>
         $(Document).ready(function () {
 
-            $('select').select2();
+            $('#models').select2();
+            $('#actions').select2();
 
-            $('.btnChangeStatus').click(function () {
-                let articleID = $(this).data('id');
-                let self = $(this);
-                Swal.fire({
-                    title: 'Statusu dəyişdirməy istədiyinizə əminsiz?',
-                    showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: 'Hə',
-                    denyButtonText: `Yox`,
-                    cancelButtonText: `Ləvğ et`,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed)
-                    {
-                        $.ajax({
-                           method: "POST",
-                            url: "{{  route('article.changeStatus') }}",
-                            data: {
-                                articleID: articleID
-                            },
-                            success: function (data){
-                                if(data.article_status)
-                                {
-                                    self.removeClass('btn-danger');
-                                    self.addClass('btn-success');
-                                    self.text('Aktiv');
-                                }
-                                else
-                                {
-                                    self.removeClass('btn-success');
-                                    self.addClass('btn-danger');
-                                    self.text('Passiv');
-                                }
 
-                                Swal.fire({
-                                    title: 'Uğurlu',
-                                    confirmButtonText: 'yaxşı',
-                                    text: 'Status dəyişdirildi',
-                                    icon: 'success',
-                                });
-                            },
-                            error: function () {
-                                console.log('ERRORRRR');
-                            }
-                        })
-                    }
-                    else if (result.isDenied)
-                    {
-                        Swal.fire({
-                            title: 'Info',
-                            confirmButtonText: 'yaxşı',
-                            text: 'Heçbir dəyişiklik edilmədi',
-                            icon: 'info',
-                        });
-                    }
-                })
-
-            });
-
-            $('.btnLogDetail').click(function () {
+            $('.btnModalLogDetail').click(function () {
                 let logID = $(this).data('id');
                 let self = $(this);
                 let route = "{{ route('dbLogs.getLog', ['id' => ':id']) }}";
@@ -191,55 +153,32 @@
                 })
             });
 
-            $('.btnDelete').click(function () {
-                let articleID = $(this).data('id');
-                let articleName = $(this).data('name');
+            $('.btnDataLogDetail').click(function () {
+                let logID = $(this).data('id');
                 let self = $(this);
+                let route = "{{ route('dbLogs.getLog', ['id' => ':id']) }}";
+                route = route.replace(":id", logID);
+                $.ajax({
+                    method: "get",
+                    url: route,
+                    data: {
+                        data_type: 'data',
+                    },
+                    async: false,
+                    success: function (data) {
+                        $('#jsonData').html(JSON.stringify(data, null, 2));
 
-                Swal.fire({
-                    title: articleName + ' i Silmək istədiyinizə əminsiz?',
-                    showDenyButton: true,
-                    showCancelButton: true,
-                    confirmButtonText: 'Hə',
-                    denyButtonText: `Yox`,
-                    cancelButtonText: `Ləvğ et`,
-                }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
-                    if (result.isConfirmed) {
-                       $.ajax({
-                           method: 'POST',
-                           url: "{{route('article.delete')}}",
-                           data: {
-                               '_method': 'DELETE',
-                               articleID: articleID
-                           },
-                           async: false,
-                           success: function (data){
-                                $('#row-' + articleID).remove();
-
-                               Swal.fire({
-                                   title: 'Uğurlu',
-                                   confirmButtonText: 'yaxşı',
-                                   text: 'Məqalə silindi',
-                                   icon: 'success',
-                               });
-                           },
-                           error: function (){
-                               console.log('ERRORRRR');
-                           }
-                       });
-
-                    } else if (result.isDenied) {
-                        Swal.fire({
-                            title: 'Info',
-                            confirmButtonText: 'yaxşı',
-                            text: 'Heçbir dəyişiklik edilmədi',
-                            icon: 'info',
-                        });
+                        document.querySelectorAll('#jsonData').forEach((block) => {
+                            hljs.highlightElement(block);
+                        })
+                    },
+                    error: function () {
+                        console.log('ERRORRRR');
                     }
                 })
-
             });
+
+
 
         });
     </script>
@@ -262,3 +201,12 @@
 
     </script>
 @endsection
+@push('javascript')
+    <script src="{{ asset('assets/front/js/highlight.min.js') }}"></script>
+    <script>
+        hljs.highlightAll();
+    </script>
+@endpush
+@push('style')
+    <link rel="stylesheet" href="{{ asset('assets/plugins/highlight/styles/androidstudio.css') }}">
+@endpush
