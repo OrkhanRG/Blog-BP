@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('vendor.pagination.customPagination');
 
 
-        View::composer(['front.*', 'mail::header', 'email.*'], function ($view) {
+        View::composer(['front.*', 'mail::header', 'email.*', 'layouts.admin.*'], function ($view) {
             $settings = Settings::first();
             $categories = Category::query()->where('status', 1)->get();
             $view->with('categories', $categories)->with('settings', $settings);

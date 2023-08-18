@@ -1,18 +1,13 @@
 <div class="app-sidebar">
     <div class="logo">
-        <a href="{{route('home')}}" class="logo-icon"><span class="logo-text">Neptune</span></a>
-        <div class="sidebar-user-switcher user-activity-online">
-            <a href="#">
-                <img src="{{asset('assets/admin/images/avatars/avatar.png')}}">
-                <span class="activity-indicator"></span>
-                <span class="user-info-text">Chloe<br><span class="user-state-info">On a call</span></span>
-            </a>
-        </div>
+        <a href="{{route('admin.index')}}">
+            <img src="{{ asset($settings->logo) }}" class="img-fluid" style="width: 70% !important;">
+        </a>
     </div>
     <div class="app-menu">
         <ul class="accordion-menu">
             <li class="sidebar-title">
-                Apps
+                Saytın İdarəetməsi
             </li>
             <li class="{{Route::is('admin.index') ? 'open' : ''}}">
                 <a href="{{route('admin.index')}}" class="{{Route::is('admin.index') ? 'active' : ''}}">
