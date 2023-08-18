@@ -143,15 +143,16 @@
                                 <!-- Slides -->
                                 <div class="swiper-slide">
                                     <iframe width="100%"
-                                            src="https://www.youtube.com/embed/pFTkk22CbAg"
-                                            title="ONUNCU YIL MARŞI" frameborder="0"
+                                            src="https://www.youtube.com/embed/3rSVGrADgos"
+                                            title="♪ 🇦🇿 «Çırpınırdı Qara Dəniz» —  Azərin ☾✵ Azər Türkləri (Yazılı) 1080p ᴴᴰ QUZEY AZƏRBAYCAN 𐱅𐰈𐰼𐰚 ☾✵"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen></iframe>
                                 </div>
 
                                 <div class="swiper-slide">
-                                    <iframe width="100%" src="https://www.youtube.com/embed/pFTkk22CbAg"
-                                            title="ONUNCU YIL MARŞI" frameborder="0"
+                                    <iframe width="100%"
+                                            src="https://www.youtube.com/embed/3rSVGrADgos"
+                                            title="♪ 🇦🇿 «Çırpınırdı Qara Dəniz» —  Azərin ☾✵ Azər Türkləri (Yazılı) 1080p ᴴᴰ QUZEY AZƏRBAYCAN 𐱅𐰈𐰼𐰚 ☾✵"
                                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                                             allowfullscreen></iframe>
                                 </div>

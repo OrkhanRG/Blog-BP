@@ -1,7 +1,7 @@
 <div class="app-sidebar">
     <div class="logo">
         <a href="{{route('admin.index')}}">
-            <img src="{{ asset($settings->logo) }}" class="img-fluid" style="width: 70% !important;">
+            <img src="{{ asset($settings->logo) }}" class="img-fluid" style="width: 40% !important; margin-top: -23px">
         </a>
     </div>
     <div class="app-menu">
