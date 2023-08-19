@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\UserLikeArticle;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class ArticleController extends Controller
@@ -156,8 +157,9 @@ class ArticleController extends Controller
         $articleQuery = Article::query()
             ->where('id', $request->id);
         $articleFind = $articleQuery->first();
-
         $data = $request->except('_token');
+
+
         $slug = $articleFind->title != $data['title'] ? $data['title'] : ($data['slug'] ?? $data['title']);
         $slug = Str::slug($slug);
         $slugTitle = Str::slug($data['title']);
@@ -181,6 +183,20 @@ class ArticleController extends Controller
 //            if (empty($data['slug']) && !is_null($articleFind->slug))
         {
             unset($data['slug']);
+        }
+
+        if ($articleFind->title != $data['title'] || $articleFind->slug != $data['slug'])
+        {
+            if (Cache::has('most_popular_articles'))
+            {
+                $mpA = Cache::get('most_popular_articles');
+                $mpA->where('title', $articleFind->title)->first()->update([
+                    'title' => $data['title'],
+                    'slug' => $slug
+                ]);
+                Cache::put('most_popular_articles', $mpA, 3600);
+            }
+//            Cache::forget('most_popular_articles');
         }
 
         if (!is_null($request->image))

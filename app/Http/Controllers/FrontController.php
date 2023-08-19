@@ -9,6 +9,7 @@ use App\Models\Settings;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 
@@ -27,31 +28,58 @@ class FrontController extends Controller
 
     public function home()
     {
-        $mostPopularCategories = Article::query()
-            ->with('category:id,name,slug,description,created_at,image')
-            ->whereHas('category', function ($query) {
-                $query->where('status', 1);
-            })
-            ->orderBy('view_count', 'DESC')
-            ->groupBy()
-            ->get();
+//        $categoryNames = Cache::get('most_popular_categories');
+//        if (!Cache::has('most_popular_categories'))
+//        {
+//            $mostPopularCategories = Article::query()
+//                ->with('category:id,name,slug,description,created_at,image')
+//                ->whereHas('category', function ($query) {
+//                    $query->where('status', 1);
+//                })
+//                ->orderBy('view_count', 'DESC')
+//                ->groupBy()
+//                ->get();
+//
+//            $categoryNames = [];
+//            $mostPopularCategories->map(function ($item) use (&$categoryNames) {
+//                if (count($categoryNames) < 4)
+//                    $categoryNames[] = $item->category;
+//            });
+//            Cache::put('most_popular_categories', $categoryNames, 60);
+//        }
 
-        $categoryNames = [];
-        $mostPopularCategories->map(function ($item) use (&$categoryNames) {
-            if (count($categoryNames) < 4)
-                $categoryNames[] = $item->category;
+        $categoryNames = Cache::remember('most_popular_categories', 3600, function (){
+            $mostPopularCategories = Article::query()
+                ->with('category:id,name,slug,description,created_at,image')
+                ->whereHas('category', function ($query) {
+                    $query->where('status', 1);
+                })
+                ->orderBy('view_count', 'DESC')
+                ->groupBy()
+                ->get();
+
+            $categoryNames = [];
+            $mostPopularCategories->map(function ($item) use (&$categoryNames) {
+                if (count($categoryNames) < 4)
+                    $categoryNames[] = $item->category;
+            });
+
+            return $categoryNames;
         });
 
-        $mostPopularArticles = Article::query()
-            ->with(['user', 'category'])
-            ->whereHas('user')
-            ->whereHas('category')
-            ->orderBy('view_count', 'DESC')
-            ->limit(6)
-            ->get();
+        $mostPopularArticles = Cache::remember('most_popular_articles', 3600, function (){
+            return Article::query()
+                ->with(['user', 'category'])
+                ->whereHas('user')
+                ->whereHas('category')
+                ->orderBy('view_count', 'DESC')
+                ->limit(6)
+                ->get();
+        });
 
         $lastPublishedArticles = Article::query()
             ->with('user', 'category')
+            ->status(1)
             ->whereHas('user')
             ->whereHas('category')
             ->orderBy('publish_date', 'DESC')
