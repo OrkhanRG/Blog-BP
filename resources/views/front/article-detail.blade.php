@@ -30,9 +30,9 @@
 
                     </div>
                     <div class="article-header-author">
-                        Yazar: <a href="#"><strong>{{$article->user->name}}</strong></a>
+                        Yazar: <a href="{{ route('front.authorArticles', ['user' => $article->user->username]) }}"><strong>{{$article->user->name}}</strong></a>
                         <br>
-                        Kateqoriya:<a href="javascript:void(0)" class="category-link">
+                        Kateqoriya:<a href="{{ route('front.categoryArticles', ['category' => $article->category->slug]) }}" class="category-link">
                             {{ $article->category->name }}
                         </a>
                     </div>
@@ -46,7 +46,7 @@
                         <img src="{{ imageExist($article->image, $settings->article_default_image) }}" class="img-fluid w-75 rounded-1">
                     </div>
                     <div class="text-secondary mt-5">
-                        {{$article->body}}
+                        {!! $article->body !!}
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                 <div class="bg-white p-4 d-flex justify-content-between align-items-center shadow-sm">
                     <img src="{{ imageExist($article->user->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
                     <div class="px-5 me-auto">
-                        <h4 class="mt-3"><a href="">{{$article->user->name}}</a></h4>
+                        <h4 class="mt-3"><a href="{{ route('front.authorArticles', ['user' => $article->user->username]) }}">{{$article->user->name}}</a></h4>
                         <p class="text-secondary">{!! $article->user->about !!}</p>
                     </div>
                 </div>
@@ -88,35 +88,35 @@
                         <!-- Additional required wrapper -->
                         <div class="swiper-wrapper">
                             <!-- Slides -->
-                            @foreach($suggestArticles as $article)
+                            @foreach($suggestArticles as $suggestArticle)
                                 <div class="swiper-slide">
                                     <a href="{{ route('front.articleDetail', [
-                                    'user' => $article->user->username,
-                                    'article' => $article->slug
+                                    'user' => $suggestArticle->user->username,
+                                    'article' => $suggestArticle->slug
                                     ]) }}">
-                                        <img src="{{ asset(imageExist($article->image, $settings->article_default_image)) }}" class="img-fluid">
+                                        <img src="{{ asset(imageExist($suggestArticle->image, $settings->article_default_image)) }}" class="img-fluid">
                                     </a>
 
                                     <div class="most-popular-body mt-2">
                                         <div class="most-popular-author d-flex justify-content-between">
                                             <div>
-                                                Yazar: <a href="#">{{ $article->user->name }}</a>
+                                                Yazar: <a href="{{ route('front.authorArticles', ['user' => $suggestArticle->user->username]) }}">{{ $suggestArticle->user->name }}</a>
                                             </div>
                                             <div class="text-end">Kategori:
-                                                <a href="{{ route('front.categoryArticles', ['category' => $article->category->slug]) }}">
-                                                    {{ $article->category->name }}
+                                                <a href="{{ route('front.categoryArticles', ['category' => $suggestArticle->category->slug]) }}">
+                                                    {{ $suggestArticle->category->name }}
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="most-popular-title">
                                             <h4 class="text-black">
-                                                <a href="#">
-                                                    {{ $article->title }}
+                                                <a href="{{ route('front.articleDetail', ['user' => $suggestArticle->user->username, 'article' => $suggestArticle->slug]) }}">
+                                                    {{ $suggestArticle->title }}
                                                 </a>
                                             </h4>
                                         </div>
                                         <div class="most-popular-date">
-                                            <span>{{ $article->format_publish_date }}</span> &#x25CF; <span>10 dk</span>
+                                            <span>{{ $suggestArticle->format_publish_date }}</span> &#x25CF; <span>10 dk</span>
                                         </div>
                                     </div>
                                 </div>
@@ -129,30 +129,30 @@
         </section>
 
         <section class="article-responses mt-4">
-            <div class="response-form bg-white shadow-sm rounded-1 p-4" style="display: none">
+            <div class="response-form bg-white shadow-sm rounded-1 p-4 d-none" id="newComment">
                 <form action="{{route('article.comment', ['article' => $article->id])}}" method="POST">
                     @csrf
                     <input type="hidden" name="parent_id" id="comment_parent_id" value="{{ null }}">
                     <div class="row">
                         <div class="col-12">
-                            <h5>Cevabınız</h5>
+                            <h5>Cavabınız</h5>
                             <hr>
                         </div>
 
                         <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="Adınız" name="name" required>
+                            <input type="text" class="form-control" placeholder="Ad Soyad" name="name" required>
                         </div>
                         <div class="col-md-6">
-                            <input type="email" class="form-control" placeholder="Email Adresi" name="email" required>
+                            <input type="email" class="form-control" placeholder="Email" name="email" required>
                         </div>
                         <div class="col-12 mt-3">
                             <textarea name="comment" id="comment" cols="30" rows="5" class="form-control"
-                                      placeholder="Mesajınız"></textarea>
+                                      placeholder="Mesaj"></textarea>
                         </div>
                         <div class="col-md-4">
                             <button class="btn-response align-items-center d-flex mt-3">
                                 <span class="material-icons-outlined me-2">send</span>
-                                Gönder
+                                Göndər
                             </button>
                         </div>
                     </div>
@@ -160,8 +160,14 @@
             </div>
 
             <div class="response-body p-4">
-                <h3>Məqaləyə Verilən Cavablar</h3>
+                <h3>Komentlər</h3>
                 <hr class="mb-4">
+
+                @if($article->comments->count() == 0)
+                    <div class="alert alert-info">
+                        Hal-hazırda heç bir komment yazılmamışdır
+                    </div>
+                @endif
 
                 @foreach($article->comments as $comment)
 
@@ -179,14 +185,15 @@
                                         $name = $comment->name;
                                     }
                                 @endphp
-                                <img src="{{asset(imageExist($comment->user->image, $settings->default_comment_profile_image))}}" alt="" width="75" height="75">
+                                <img src="{{imageExist($comment->user?->image, $settings->default_comment_profile_image)}}" alt="" width="75" height="75">
                             </div>
                             <div class="col-md-10">
                                 <div class="px-3">
                                     <div class="comment-title-date d-flex justify-content-between">
                                         <h4 class="mt-3"><a href="">{{$name}}</a></h4>
-                                        <time
-                                            datetime="{{\Carbon\Carbon::parse($comment->created_at)->format('d-m-Y')}}">{{\Carbon\Carbon::parse($comment->created_at)->format('d-m-Y')}}</time>
+                                        <time datetime="{{\Carbon\Carbon::parse($comment->created_at)->format('d-m-Y')}}">
+                                            {{\Carbon\Carbon::parse($comment->created_at)->format('d-m-Y')}}
+                                        </time>
                                     </div>
                                     <p class="text-secondary">{{$comment->comment}}</p>
                                     <div class="text-end d-flex  align-items-center justify-content-between">
@@ -230,7 +237,7 @@
                                             }
                                             @endphp
                                         <div class="col-md-2">
-                                            <img src="{{ imageExist($child->user->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
+                                            <img src="{{ imageExist($child->user?->image, $settings->default_comment_profile_image) }}" alt="" width="75" height="75">
                                         </div>
                                         <div class="col-md-10">
                                             <div class="px-3">
@@ -355,6 +362,37 @@
                 icon: 'info',
             });
             @endif
+        });
+
+        $('.btnArticleResponse').click(function ()
+        {
+            let responseForm = $('.response-form')
+            if (responseForm.hasClass('d-none'))
+            {
+                responseForm.removeClass('d-none');
+                responseForm.addClass('d-block');
+            }
+
+            $("html, body").animate({
+                scrollTop: $("#newComment").offset().top
+            }, 50);
+        });
+
+        $('.btnArticleResponseComment').click(function ()
+        {
+            let commentID = $(this).data('id');
+            $('#comment_parent_id').val(commentID);
+
+            let responseForm = $('.response-form')
+            if (responseForm.hasClass('d-none'))
+            {
+                responseForm.removeClass('d-none');
+                responseForm.addClass('d-block');
+            }
+
+            $("html, body").animate({
+                scrollTop: $("#newComment").offset().top
+            }, 50);
         });
     </script>
 @endsection

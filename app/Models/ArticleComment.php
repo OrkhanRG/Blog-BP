@@ -17,7 +17,7 @@ class ArticleComment extends Model
 
     public function scopeApproveStatus($query)
     {
-        return $query->where('status', 0);
+        return $query->where('approve_status', 0);
     }
 
     public function scopeStatus($query, $status)

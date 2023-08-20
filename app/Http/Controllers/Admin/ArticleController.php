@@ -185,7 +185,8 @@ class ArticleController extends Controller
             unset($data['slug']);
         }
 
-        if ($articleFind->title != $data['title'] || $articleFind->slug != $data['slug'])
+
+        if ($articleFind->title != $data['title'] || isset($data['slug']) && $articleFind->slug != $data['slug'])
         {
             if (Cache::has('most_popular_articles'))
             {

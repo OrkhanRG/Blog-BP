@@ -30,11 +30,11 @@
                         <div>
                             Yazar: <a href="{{ route('front.authorArticles', ['user' => $item->user->username]) }}">{{$item->user->name}}</a>
                         </div>
-                        <div class="text-end">Kategori: <a href="#">{{$item->category->name}}</a></div>
+                        <div class="text-end">Kategori: <a href="{{ route('front.categoryArticles', ['category' => $item->category->slug]) }}">{{$item->category->name}}</a></div>
                     </div>
                     <div class="most-popular-title">
                         <h4 class="text-black">
-                            <a href="#">
+                            <a href="{{ route('front.articleDetail', ['user' => $item->user->username, 'article' => $item->slug]) }}">
                                 {{substr($item->title, 0, 20)}}...
                             </a>
                         </h4>
@@ -48,7 +48,14 @@
 
 
         <hr style="border:1px solid #a9abad;" class="mt-5">
-        <div class="col-8 mx-auto mt-5">
+
+        @if($articles->count() == 0)
+            <div class="alert alert-info">
+                Məlumat Tapılmadı.
+            </div>
+        @endif
+
+        <div class="col-8 mx-auto mt-5 d-flex justify-content-center">
             {{$articles->links()}}
         </div>
     </section>

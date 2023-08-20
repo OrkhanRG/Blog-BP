@@ -28,6 +28,7 @@ class FrontController extends Controller
 
     public function home()
     {
+        Cache::forget('most_popular_categories');
 //        $categoryNames = Cache::get('most_popular_categories');
 //        if (!Cache::has('most_popular_categories'))
 //        {
@@ -47,16 +48,17 @@ class FrontController extends Controller
 //            });
 //            Cache::put('most_popular_categories', $categoryNames, 60);
 //        }
-
         $categoryNames = Cache::remember('most_popular_categories', 3600, function (){
             $mostPopularCategories = Article::query()
-                ->with('category:id,name,slug,description,created_at,image')
+                ->with('category:id,name,slug,description,created_at,image,color')
                 ->whereHas('category', function ($query) {
-                    $query->where('status', 1);
+                    $query->where('status', 1)
+                        ->where('feature_status', 1);
                 })
                 ->orderBy('view_count', 'DESC')
-                ->groupBy()
+                ->groupBy('category_id')
                 ->get();
+
 
             $categoryNames = [];
             $mostPopularCategories->map(function ($item) use (&$categoryNames) {
@@ -147,7 +149,8 @@ class FrontController extends Controller
         $article->increment('view_count');
         $article->save();
 
-        return view('front.article-detail', compact('article', 'userLike', 'suggestArticles'));
+        return view('front.article-detail',
+            compact('article', 'userLike', 'suggestArticles'));
     }
 
     public function articleComment(Request $request, Article $article)
@@ -212,7 +215,7 @@ class FrontController extends Controller
 
     public function articleList()
     {
-        $articles = Article::query()->where('publish_date', '<=', now())->orderBy('publish_date', 'DESC')->paginate(21);
+        $articles = Article::query()->where('publish_date', '<=', now())->orderBy('publish_date', 'DESC')->paginate(9);
 
         return view('front.article-list', compact( 'articles'));
     }

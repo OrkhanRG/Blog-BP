@@ -81,7 +81,11 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">IP</th>
-                    <th scope="col">Status</th>
+                    @if(isset($page) && $page == 'approval')
+                        <th scope="col">Approve Status</th>
+                    @else
+                        <th scope="col">Status</th>
+                    @endif
                     <th scope="col">Comment</th>
                     <th scope="col">Created Date</th>
                     <th scope="col">Actions</th>
@@ -104,13 +108,24 @@
                             <td>{{$comment->email}}</td>
                             <td>{{$comment->ip}}</td>
                             <td>
-                                @if($comment->status)
-                                    <a href="javascript:void(0)" class="btn btn-success btn-sm btnChangeStatus"
-                                       data-id="{{$comment->id}}">Aktiv</a>
-                                @else
-                                    <a href="javascript:void(0)" class="btn btn-danger btn-sm btnChangeStatus"
-                                       data-id="{{$comment->id}}">Passiv</a>
-                                @endif
+                            @if(isset($page) && $page!='commentList')
+                                    @if($comment->approve_status)
+                                        <a href="javascript:void(0)" class="btn btn-success btn-sm btnChangeStatus"
+                                           data-id="{{$comment->id}}">Aktiv</a>
+                                    @else
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-sm btnChangeStatus"
+                                           data-id="{{$comment->id}}">Passiv</a>
+                                    @endif
+                            @else
+                                    @if($comment->status)
+                                        <a href="javascript:void(0)" class="btn btn-success btn-sm btnChangeStatus"
+                                           data-id="{{$comment->id}}">Aktiv</a>
+                                    @else
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-sm btnChangeStatus"
+                                           data-id="{{$comment->id}}">Passiv</a>
+                                    @endif
+                            @endif
+
                             </td>
                             <td>
                                 {{--<span data-bs-container="body" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{substr($comment->comment, 0, 200)}}">
@@ -178,10 +193,55 @@
 
 @section('js')
     <script>
-        $(Document).ready(function () {
+        $(Document).ready(function ()
+        {
+            @if(isset($page) && $page=='approval')
+            $('.btnChangeStatus').click(function () {
+                let id = $(this).data('id');
+                let self = $(this);
+                Swal.fire({
+                    title: 'Təsdiq etmək istədiyinizə əminsiz?',
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: 'Hə',
+                    denyButtonText: `Yox`,
+                    cancelButtonText: `Ləvğ et`,
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            method: "POST",
+                            url: "{{  route('article.pending-approval.changeStatus') }}",
+                            data: {
+                                id: id,
+                                page: "{{ $page }}"
+                            },
+                            success: function (data) {
+                                $('#row-'+id).remove();
 
-            $('select').select2();
+                                Swal.fire({
+                                    title: 'Uğurlu',
+                                    confirmButtonText: 'yaxşı',
+                                    text: 'Təsdiq olundu',
+                                    icon: 'success',
+                                });
+                            },
+                            error: function () {
+                                console.log('ERRORRRR');
+                            }
+                        })
+                    } else if (result.isDenied) {
+                        Swal.fire({
+                            title: 'Info',
+                            confirmButtonText: 'yaxşı',
+                            text: 'Heçbir dəyişiklik edilmədi',
+                            icon: 'info',
+                        });
+                    }
+                })
 
+            });
+            @else
             $('.btnChangeStatus').click(function () {
                 let id = $(this).data('id');
                 let self = $(this);
@@ -203,15 +263,30 @@
                             },
                             success: function (data) {
                                 if (data.comment_status) {
-                                    $('#row-' + id).remove();
+                                    self.removeClass('btn-danger');
+                                    self.addClass('btn-success');
+                                    self.text('Aktiv');
+                                    Swal.fire({
+                                        title: 'Uğurlu',
+                                        confirmButtonText: 'yaxşı',
+                                        text: 'Kommnet statusu aktiv olaraq dəyişdirildi',
+                                        icon: 'success',
+                                    });
+                                }
+                                else
+                                {
+                                    self.removeClass('btn-success');
+                                    self.addClass('btn-danger');
+                                    self.text('Passiv');
+                                    Swal.fire({
+                                        title: "Uğurlu",
+                                        text: "Kommnet statusu passiv olaraq dəyişdirildi",
+                                        confirmButtonText: 'yaxşı',
+                                        icon: "success"
+                                    });
                                 }
 
-                                Swal.fire({
-                                    title: 'Uğurlu',
-                                    confirmButtonText: 'yaxşı',
-                                    text: 'Kommnet dəyişdirildi',
-                                    icon: 'success',
-                                });
+
                             },
                             error: function () {
                                 console.log('ERRORRRR');
@@ -228,6 +303,9 @@
                 })
 
             });
+            @endif
+
+            $('select').select2();
 
             $('.btnDelete').click(function () {
                 let id = $(this).data('id');
