@@ -1,5 +1,23 @@
 @extends('layouts.front')
 
+@push('meta')
+{{--    @php
+        $url = request()->url();
+        $url = request()->segments();
+        $url = request()->segment(1);
+    @endphp
+    @if(str_contains($url, 'kateqoriyalar'))--}}
+    @if(Route::is('front.categoryArticles'))
+        <meta name="description" content="{{ $category->seo_description }}">
+        <meta name="keywords" content="{{ $category->seo_keywords }}">
+        <meta name="author" content="{{ $category->user->name }}">
+    @else
+        <meta name="description" content="{{ $settings->seo_description_articles }}">
+        <meta name="keywords" content="{{ $settings->seo_keywords_articles }}">
+        <meta name="author" content="Orxan Ismayilov">
+    @endif
+@endpush
+
 @section('css')
 @endsection
 

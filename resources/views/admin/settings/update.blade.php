@@ -55,6 +55,46 @@
                             {{$errors->first('header_text')}}
                         @endif
 
+                        <label for="seo_keywords_home" class="form-label m-t-sm">Seo Keywords Anasəhifə</label>
+                        <textarea
+                            class="form-control form-control-solid-bordered m-b-sm"
+                            name="seo_keywords_home"
+                            id="seo_keywords_home"
+                            cols="30"
+                            rows="5"
+                            placeholder="Seo Keywords Anasəhifə"
+                            style="resize: none;">{{isset($settings) ? $settings->seo_keywords_home : ''}}</textarea>
+
+                        <label for="seo_description_home" class="form-label m-t-sm">Seo Description Anasəhifə</label>
+                        <textarea
+                            class="form-control form-control-solid-bordered m-b-sm"
+                            name="seo_description_home"
+                            id="seo_description_home"
+                            cols="30"
+                            rows="5"
+                            placeholder="Seo Description Anasəhifə"
+                            style="resize: none;">{{isset($settings) ? $settings->seo_description_home : ''}}</textarea>
+
+                        <label for="seo_keywords_articles" class="form-label m-t-sm">Seo Keywords Məqalə</label>
+                        <textarea
+                            class="form-control form-control-solid-bordered m-b-sm"
+                            name="seo_keywords_articles"
+                            id="seo_keywords_articles"
+                            cols="30"
+                            rows="5"
+                            placeholder="Seo Keywords Məqalə"
+                            style="resize: none;">{{isset($settings) ? $settings->seo_keywords_articles : ''}}</textarea>
+
+                        <label for="seo_description_articles" class="form-label m-t-sm">Seo Description Məqalə</label>
+                        <textarea
+                            class="form-control form-control-solid-bordered m-b-sm"
+                            name="seo_description_articles"
+                            id="seo_description_articles"
+                            cols="30"
+                            rows="5"
+                            placeholder="Seo Description Məqalə"
+                            style="resize: none;">{{isset($settings) ? $settings->seo_description_articles : ''}}</textarea>
+
                         <label for="footer_text" class="form-label mt-3 ">Footer mətni</label>
                         <textarea
                             class="form-control form-control-solid-bordered m-b-sm

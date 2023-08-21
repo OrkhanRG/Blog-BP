@@ -1,5 +1,11 @@
 @extends('layouts.front')
 
+@push('meta')
+    <meta name="description" content="{{ $settings->seo_decription_home }}">
+    <meta name="keywords" content="{{ $settings->seo_keywords_home }}">
+    <meta name="author" content="Orxan Ismayilov">
+@endpush
+
 @section('css')
 @endsection
 

@@ -106,9 +106,10 @@ class FrontController extends Controller
             })
             ->paginate(21);
 
-        $title = Category::query()->where('slug', $slug)->first()->name . ' Kateqoriyasına Aid Məqalələr';
+        $category = Category::query()->where('slug', $slug)->first();
+        $title = $category->name . ' Kateqoriyasına Aid Məqalələr';
 
-        return view('front.article-list', compact( 'articles', 'title'));
+        return view('front.article-list', compact( 'articles', 'title', 'category'));
     }
 
     public function articleDetail(Request $request, string $username, string $articleSlug)
