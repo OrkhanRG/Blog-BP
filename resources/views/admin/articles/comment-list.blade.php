@@ -128,10 +128,6 @@
 
                             </td>
                             <td>
-                                {{--<span data-bs-container="body" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{substr($comment->comment, 0, 200)}}">
-                                    {{ substr($comment->comment, 0, 10) }}
-                                </span>--}}
-
                                 <button type="button" class="btn btn-primary lookComment btn-sm p-0 px-2"
                                         data-comment="{{$comment->comment}}"
                                         data-bs-toggle="modal"
@@ -143,7 +139,7 @@
                             </td>
                             <td>{{\Carbon\Carbon::parse($comment->created_at)->translatedFormat('d F Y H:i:s')}}</td>
                             <td>
-                                <div class="d-flex">
+                                <div class="d-flex actions-{{$comment->id}}">
                                     <a href="javascript:void(0)"
                                        class="btn btn-danger btn-sm btnDelete"
                                        data-id="{{$comment->id}}"
@@ -155,7 +151,7 @@
                                            class="btn btn-primary btn-sm btnRestore"
                                            data-id="{{$comment->id}}"
                                            data-name="{{$comment->name}}"
-                                           title="geri al">
+                                           title="Geri qaytar">
                                             <i class="material-icons ms-0">undo</i>
                                         </a>
                                     @endif
@@ -331,8 +327,19 @@
                             },
                             async: false,
                             success: function (data) {
-                                $('#row-' + id).remove();
-
+                                let aElement = document.createElement('a');
+                                aElement.className = "btn btn-primary btn-sm btnRestore";
+                                aElement.setAttribute('data-id', id);
+                                aElement.setAttribute('data-name', id);
+                                aElement.setAttribute('title', 'Geri qaytar');
+                                aElement.href = "javascript:void(0)";
+                                let iELement = document.createElement('i');
+                                iELement.className = "material-icons ms-0";
+                                iELement.innerText = 'undo';
+                                aElement.append(iELement);
+                                let actions = document.getElementsByClassName('actions-'+id);
+                                actions[0].appendChild(aElement);
+                                console.log(actions);
                                 Swal.fire({
                                     title: 'Uğurlu',
                                     confirmButtonText: 'yaxşı',
@@ -357,7 +364,10 @@
 
             });
 
-            $('.btnRestore').click(function () {
+            // $('body').on('click', 'btnRestore', function (){
+            //
+            // })
+            $(document).on('click' ,'.btnRestore' ,function () {
                 let id = $(this).data('id');
                 let commentName = $(this).data('name');
                 let self = $(this);

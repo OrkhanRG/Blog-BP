@@ -271,7 +271,68 @@
                     @endif
                 </td>
             </tr>
-
+        @elseif($logtype == "App\Models\ArticleComment")
+            @if($data->user)
+                <tr>
+                    <td>İstifadəçi Adı</td>
+                    <td>
+                        {{ $data->user?->name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>
+                        {{ $data->user?->email }}
+                    </td>
+                </tr>
+            @else
+                <tr>
+                    <td>Ziyarətçi Adı</td>
+                    <td>
+                        {{ $data->name }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Ziyarətçi Email</td>
+                    <td>
+                        {{ $data->email }}
+                    </td>
+                </tr>
+            @endif
+            <tr>
+                <td>Məqalə Başlığı</td>
+                <td>
+                    <a target="_blank" href="{{ route('front.articleDetail', ['user' => $data->user->username, 'article' => $data->article->slug]) }}">
+                        {{ $data->article->title }}
+                    </a>
+                </td>
+            </tr>
+            @if($data->parent)
+                <tr>
+                    <td>Üst Komment</td>
+                    <td>
+                        {{ $data->parent->comment }}
+                    </td>
+                </tr>
+            @endif
+            <tr>
+                <td>Komment</td>
+                <td>
+                    {{ $data->comment }}
+                </td>
+            </tr>
+            <tr>
+                <td>IP Adres</td>
+                <td>
+                    {{ $data->ip }}
+                </td>
+            </tr>
+            <tr>
+                <td>Komment Tarixi</td>
+                <td>
+                    {{ $data->created_at }}
+                </td>
+            </tr>
         @endif
     </x-slot:rows>
 </x-bootstrap.table>

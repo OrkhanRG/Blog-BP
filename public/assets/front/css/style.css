@@ -253,7 +253,7 @@ a.category-link:hover{
 .scroll-to-top{
     right: 15px;
     bottom: 100px;
-    background-color: #20e841;
+    background-color: #ee8606;
     opacity: 0.75;
     animation: scrollMovie 0.75s infinite alternate;
     cursor: pointer;
