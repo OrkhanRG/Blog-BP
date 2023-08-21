@@ -241,6 +241,10 @@
     </div>
 </footer>
 
+<div class="position-fixed scroll-to-top btn btn-secondary btn-circle">
+    <i class="fa fa-chevron-up"></i>
+</div>
+
 
 <!--<script src="assets/front/js/bootstrap.bundle.min.js"></script>-->
 <script src="{{asset('assets/front/js/bootstrap.min.js')}}"></script>
