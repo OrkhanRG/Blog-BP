@@ -9,6 +9,7 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ArticleCommentController;
 use App\Http\Controllers\Admin\LogController;
+use App\Http\Controllers\Admin\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,9 +33,7 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
         Route::get('logs-db', [LogController::class, 'index'])->name('dbLogs');
         Route::get('logs-db/{id}', [LogController::class, 'getLog'])->name('dbLogs.getLog')->whereNumber('id');
 
-        Route::get('/', function () {
-            return view('admin.index');
-        })->name('admin.index');
+        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
 
         //articles
         Route::get('/articles', [ArticleController::class, 'index'])->name('article.index');
