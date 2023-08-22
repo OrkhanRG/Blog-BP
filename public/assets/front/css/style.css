@@ -269,6 +269,11 @@ a.category-link:hover{
     text-align: center;
 }
 
+.bg-sub-category{
+    background-color: #eaeaea;
+}
+
+
 @media screen and (max-width: 768px) {
 
 }

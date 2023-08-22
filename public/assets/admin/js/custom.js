@@ -49,7 +49,6 @@ $(document).ready(function (){
         let filters1 = $('#formFilter input')
         let filters2 = $('#formFilter select');
         let filters = filters1.toArray().concat(filters2.toArray());
-        console.log(filters2.val('').trigger('change'));
 
         filters.forEach(function (element, index, arr){
             element.value=null;
