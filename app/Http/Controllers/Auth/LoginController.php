@@ -264,7 +264,7 @@ class LoginController extends Controller
         }
 
         Mail::to($find->email)->send(new ResetPasswordMail($find, $token));
-        $this->log('password reset mail send', $find->id, $find->toArrya(), User::class);
+        $this->log('password reset mail send', $find->id, $find->toArray(), User::class, true);
 
         alert()
             ->success("Uğurlu", "Şifrənizi sıfırlamaq üçün mail göndərildi.")

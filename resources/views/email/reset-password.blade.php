@@ -136,6 +136,38 @@
         }
     </style>
 </head>
+@php
+    if (isset($theme))
+        {
+            $title = $theme->title;
+
+            $logo = $theme->logo;
+            $logoAlt = $theme->logo_alt;
+            $logoTitle = $theme->logo_title;
+
+            $buttonText = $theme->button_text;
+            $description = $theme->description;
+
+            $resetPasswordImage = $theme->reset_password_image;
+            $resetPasswordImageAlt = $theme->reset_password_image_alt;
+            $resetPasswordImageTitle = $theme->reset_password_image_title;
+        }
+    else
+        {
+            $title = "Şifrə Dəyişdirmə Maili";
+
+            $logo = asset($settings->logo);
+            $logoAlt = "Şifrə Yeniləmə";
+            $logoTitle = "Şifrə Yeniləmə";
+
+            $buttonText = "Şifrəmi Sıfırla";
+            $description = "Aşağıdakı linkə keçid edərək şifrənizi dəyişdirə bilərsiniz.";
+
+            $resetPasswordImage = asset($settings->reset_password_image);
+            $resetPasswordImageAlt = "Şifrə Sıfırlama";
+            $resetPasswordImageTitle = "Şifrə Sıfırlama";
+        }
+@endphp
 <body style="background-color: #fff0e3; margin: 0; padding: 0; -webkit-text-size-adjust: none; text-size-adjust: none;">
 <table border="0" cellpadding="0" cellspacing="0" class="nl-container" role="presentation"
        style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff0e3;" width="100%">
@@ -194,9 +226,9 @@
                                         <tr>
                                             <td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
                                                 <div align="center" class="alignment" style="line-height:10px"><img
-                                                        alt="Şifrə Yeniləmə" src="{{ asset($settings->logo) }}"
+                                                        alt="{{ $logoAlt }}" src="{{ $logo }}"
                                                         style="display: block; height: auto; border: 0; max-width: 147.33333333333331px; width: 100%;"
-                                                        title="Şifrə Yeniləmə" width="147.33333333333331"/></div>
+                                                        title="{{ $logoTitle }}" width="147.33333333333331"/></div>
                                             </td>
                                         </tr>
                                     </table>
@@ -260,10 +292,10 @@
                                         <tr>
                                             <td class="pad">
                                                 <div align="center" class="alignment" style="line-height:10px"><img
-                                                        alt="Şifrə Sıfırlama" class="fullWidth"
-                                                        src="{{ asset($settings->reset_password_image) }}"
+                                                        alt="{{ $resetPasswordImageAlt }}" class="fullWidth"
+                                                        src="{{ $resetPasswordImage }}"
                                                         style="display: block; height: auto; border: 0; max-width: 374px; width: 100%;"
-                                                        title="Şifrə Sıfırlama" width="374"/></div>
+                                                        title="{{ $resetPasswordImageTitle }}" width="374"/></div>
                                             </td>
                                         </tr>
                                     </table>
@@ -276,7 +308,7 @@
                                         <tr>
                                             <td class="pad" style="text-align:center;width:100%;">
                                                 <h1 style="margin: 0; color: #101010; direction: ltr; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; font-size: 27px; font-weight: normal; letter-spacing: normal; line-height: 120%; text-align: center; margin-top: 0; margin-bottom: 0;">
-                                                    <strong>{{ $title ?? "Şifrə Dəyişdirmə Maili" }}</strong></h1>
+                                                    <strong>{{ $title }}</strong></h1>
                                             </td>
                                         </tr>
                                     </table>
@@ -320,7 +352,7 @@
                                                     <div class=""
                                                          style="font-size: 12px; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 21.6px; color: #848484; line-height: 1.8;">
                                                         <p style="margin: 0; font-size: 14px; text-align: center; mso-line-height-alt: 25.2px;">
-                                                            <span style="font-size:14px;">{{ $description ?? "Aşağıdakı linkə keçid edərək şifrənizi dəyişdirə bilərsiniz." }}</span>
+                                                            <span style="font-size:14px;">{{ $description }}</span>
                                                         </p>
                                                     </div>
                                                 </div>
@@ -350,7 +382,7 @@
                                                                    style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#101;border-radius:4px;width:auto;border-top:1px solid #101;font-weight:undefined;border-right:1px solid #101;border-bottom:1px solid #101;border-left:1px solid #101;padding-top:5px;padding-bottom:5px;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;"
                                                                    target="_blank"><span
                                                             style="padding-left:20px;padding-right:20px;font-size:16px;display:inline-block;letter-spacing:normal;"><span
-                                                                style="word-break: break-word; line-height: 32px;">Şifrəmi Sıfırla</span></span></a>
+                                                                style="word-break: break-word; line-height: 32px;">{{ $buttonText }}</span></span></a>
                                                     <!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div>
                                             </td>
                                         </tr>

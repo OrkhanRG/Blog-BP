@@ -101,4 +101,23 @@ $(document).ready(function(){
         height: 100
     })
 
+    $('#custom_content').summernote({
+        // toolbar: [
+        //     ['popovers', ['lfm']],
+        // ],
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'lfm']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ],
+        buttons: {
+            lfm: LFMButton
+        },
+        height: 100
+    })
+
 });

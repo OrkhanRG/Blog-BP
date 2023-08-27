@@ -111,8 +111,8 @@
 
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="1" name="status"
-                                   id="statsu" {{isset($article) && $article->status ? 'checked' : ''}}>
-                            <label class="form-check-label" for="statsu">
+                                   id="status" {{isset($article) && $article->status ? 'checked' : ''}}>
+                            <label class="form-check-label" for="status">
                                 Məqalə saytda aktiv olaraq görünsün?
                             </label>
                         </div>

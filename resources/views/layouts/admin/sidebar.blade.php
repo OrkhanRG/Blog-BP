@@ -70,6 +70,29 @@
                 </ul>
             </li>
 
+            <li class="{{ Route::is('admin.email-themes.create') || Route::is('admin.email-themes.index') || Route::is('admin.email-themes.assign') || Route::is('admin.email-themes.assign-list') ? 'open' : '' }}">
+                <a href="#">
+                    <i class="material-icons-two-tone">email</i>
+                    Email
+                    <i class="material-icons has-sub-menu">keyboard_arrow_right</i>
+                </a>
+                <ul class="sub-menu" style="">
+                    <li>
+                        <a href="{{route('admin.email-themes.create')}}" class="{{ Route::is('admin.email-themes.create') ? 'active' : '' }}">Yeni Şablon Yarat</a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.email-themes.index')}}" class="{{ Route::is('admin.email-themes.index') ? 'active' : '' }}">Şablonlar</a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.email-themes.assign')}}" class="{{ Route::is('admin.email-themes.assign') ? 'active' : '' }}">Şablon Seçimi</a>
+                    </li>
+                    <li>
+                        <a href="{{route('admin.email-themes.assign-list')}}" class="{{ Route::is('admin.email-themes.assign-list') ? 'active' : '' }}">Şablon Seçim Siyahısı</a>
+                    </li>
+                </ul>
+            </li>
+
+
             <li class="{{ Route::is('settings') ? 'open' : '' }}">
                 <a href="{{route('settings')}}">
                     <i class="material-icons-two-tone">settings</i>
@@ -79,7 +102,7 @@
 
             <li class="{{ Route::is('dbLogs') ? 'open' : '' }}">
                 <a href="{{route('dbLogs')}}">
-                    <i class="material-icons-two-tone">settings</i>
+                    <i class="material-icons-two-tone">disabled_visible</i>
                     Loglar
                 </a>
             </li>
